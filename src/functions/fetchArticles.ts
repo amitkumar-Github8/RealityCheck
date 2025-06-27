@@ -1,12 +1,10 @@
 import NewsAPI from 'newsapi';
-import Parser from 'rss-parser';
 import { supabase } from '../lib/supabase';
 import { detectImageManipulation } from './detectImageManipulation';
 import { verifyTextClaim } from './verifyTextClaim';
 import { summarizeAndStrategize } from './summarizeAndStrategize';
 
 const newsapi = new NewsAPI(import.meta.env.VITE_NEWSAPI_KEY || 'demo-key');
-const parser = new Parser();
 
 export async function fetchArticles(sector: string = 'general') {
   try {
