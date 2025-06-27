@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { 
   ExternalLink, 
   Clock, 
@@ -10,10 +11,10 @@ import {
   ThumbsUp, 
   ThumbsDown,
   Target,
-  TrendingUp,
   Shield
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface Article {
   id: string;
@@ -43,6 +44,7 @@ interface ArticleCardProps {
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
+  const { isDark } = useTheme();
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
 
   const formatDate = (dateString: string) => {
@@ -167,20 +169,27 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
   const textBadge = getTextBadge();
 
   return (
-    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
+    <motion.div
+      whileHover={{ y: -5, scale: 1.02 }}
+      className={`backdrop-blur-sm border rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 group ${
+        isDark
+          ? 'bg-white/5 border-white/10 hover:bg-white/10'
+          : 'bg-white/50 border-slate-200 hover:bg-white/70'
+      }`}
+    >
       {/* Article Image */}
       {article.image_url && (
-        <div className="relative mb-4">
+        <div className="relative mb-6">
           <img
             src={article.image_url}
             alt={article.title}
-            className="w-full h-40 object-cover rounded-xl"
+            className="w-full h-48 object-cover rounded-2xl"
             onError={(e) => {
               e.currentTarget.src = 'https://images.pexels.com/photos/518543/pexels-photo-518543.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop';
             }}
           />
-          <div className="absolute top-3 right-3 flex space-x-2">
-            <div className={`px-2 py-1 rounded-full border text-xs font-semibold flex items-center space-x-1 ${imageBadge.bg}`}>
+          <div className="absolute top-4 right-4 flex space-x-2">
+            <div className={`px-3 py-1 rounded-full border text-xs font-semibold flex items-center space-x-1 backdrop-blur-sm ${imageBadge.bg}`}>
               <Eye className="w-3 h-3" />
               <span className={imageBadge.color}>Image</span>
             </div>
@@ -191,54 +200,73 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
       {/* Article Content */}
       <div className="space-y-4">
         {/* Title */}
-        <h3 className="text-white font-bold text-lg leading-tight line-clamp-2 group-hover:text-purple-300 transition-colors">
+        <h3 className={`font-bold text-lg leading-tight line-clamp-2 transition-colors group-hover:text-purple-400 ${
+          isDark ? 'text-white' : 'text-slate-900'
+        }`}>
           {article.title}
         </h3>
 
         {/* Snippet */}
-        <p className="text-slate-300 text-sm leading-relaxed line-clamp-3">
+        <p className={`text-sm leading-relaxed line-clamp-3 transition-colors ${
+          isDark ? 'text-slate-300' : 'text-slate-600'
+        }`}>
           {article.content.substring(0, 150)}...
         </p>
 
-        {/* Badges */}
+        {/* Verification Badges */}
         <div className="flex flex-wrap gap-2">
-          <div className={`px-3 py-1 rounded-full border text-xs font-semibold flex items-center space-x-1 ${imageBadge.bg}`}>
+          <div className={`px-3 py-1 rounded-full border text-xs font-semibold flex items-center space-x-1 backdrop-blur-sm ${imageBadge.bg}`}>
             <imageBadge.icon className="w-3 h-3" />
             <span className={imageBadge.color}>
               {imageBadge.text}
               {article.image_check && ` (${article.image_check.confidence_score}%)`}
             </span>
           </div>
-          <div className={`px-3 py-1 rounded-full border text-xs font-semibold flex items-center space-x-1 ${textBadge.bg}`}>
+          <div className={`px-3 py-1 rounded-full border text-xs font-semibold flex items-center space-x-1 backdrop-blur-sm ${textBadge.bg}`}>
             <Search className="w-3 h-3" />
             <span className={textBadge.color}>
               {textBadge.text}
               {article.text_check && ` (${article.text_check.confidence_score}%)`}
             </span>
           </div>
-          <div className="px-3 py-1 rounded-full border border-purple-500/20 bg-purple-500/10 text-xs font-semibold text-purple-300">
+          <div className="px-3 py-1 rounded-full border border-purple-500/20 bg-purple-500/10 text-xs font-semibold text-purple-300 backdrop-blur-sm">
             {article.sector.toUpperCase()}
           </div>
         </div>
 
-        {/* Strategy Summary */}
+        {/* Reality Digest */}
         {article.strategy && (
-          <div className="bg-white/5 border border-white/10 rounded-lg p-3">
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            className={`backdrop-blur-sm border rounded-2xl p-4 ${
+              isDark
+                ? 'bg-white/5 border-white/10'
+                : 'bg-white/50 border-slate-200'
+            }`}
+          >
             <div className="flex items-center space-x-2 mb-2">
               <Target className="w-4 h-4 text-purple-400" />
-              <span className="text-white font-semibold text-sm">Strategy</span>
+              <span className={`font-semibold text-sm transition-colors ${
+                isDark ? 'text-white' : 'text-slate-900'
+              }`}>
+                Reality Digest
+              </span>
               <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getPriorityColor(article.strategy.priority_level)}`}>
                 {article.strategy.priority_level.toUpperCase()}
               </span>
             </div>
-            <p className="text-slate-300 text-xs leading-relaxed line-clamp-2">
+            <p className={`text-xs leading-relaxed line-clamp-2 transition-colors ${
+              isDark ? 'text-slate-300' : 'text-slate-600'
+            }`}>
               {article.strategy.summary}
             </p>
-          </div>
+          </motion.div>
         )}
 
         {/* Meta Information */}
-        <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className={`flex items-center justify-between text-xs transition-colors ${
+          isDark ? 'text-slate-400' : 'text-slate-500'
+        }`}>
           <div className="flex items-center space-x-2">
             <Clock className="w-3 h-3" />
             <span>{formatDate(article.published_at)}</span>
@@ -253,41 +281,51 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
         {/* Action Buttons */}
         <div className="flex space-x-2">
-          <a
+          <motion.a
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             href={article.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 bg-white/10 border border-white/10 text-white text-sm py-2 rounded-lg hover:bg-white/20 transition-colors flex items-center justify-center space-x-1"
+            className={`flex-1 backdrop-blur-sm border text-sm py-3 rounded-2xl transition-all duration-300 flex items-center justify-center space-x-2 ${
+              isDark
+                ? 'bg-white/10 border-white/10 text-white hover:bg-white/20'
+                : 'bg-white/50 border-slate-200 text-slate-700 hover:bg-white/70'
+            }`}
           >
             <span>Read Full</span>
             <ExternalLink className="w-3 h-3" />
-          </a>
+          </motion.a>
           
           {!feedbackSubmitted ? (
             <div className="flex space-x-1">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={() => submitFeedback(true)}
-                className="bg-green-500/10 border border-green-500/20 text-green-400 p-2 rounded-lg hover:bg-green-500/20 transition-colors"
+                className="bg-green-500/10 border border-green-500/20 text-green-400 p-3 rounded-2xl hover:bg-green-500/20 transition-all duration-300"
                 title="Helpful"
               >
                 <ThumbsUp className="w-3 h-3" />
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={() => submitFeedback(false)}
-                className="bg-red-500/10 border border-red-500/20 text-red-400 p-2 rounded-lg hover:bg-red-500/20 transition-colors"
+                className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-2xl hover:bg-red-500/20 transition-all duration-300"
                 title="Not helpful"
               >
                 <ThumbsDown className="w-3 h-3" />
-              </button>
+              </motion.button>
             </div>
           ) : (
-            <div className="bg-purple-500/10 border border-purple-500/20 text-purple-400 px-3 py-2 rounded-lg text-xs">
+            <div className="bg-purple-500/10 border border-purple-500/20 text-purple-400 px-4 py-3 rounded-2xl text-xs font-semibold">
               Thanks!
             </div>
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
