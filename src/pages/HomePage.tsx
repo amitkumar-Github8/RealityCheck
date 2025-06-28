@@ -17,6 +17,7 @@ import {
   Target
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import TodaysInsight from '../components/TodaysInsight';
 
 const HomePage: React.FC = () => {
   const { isDark } = useTheme();
@@ -61,14 +62,6 @@ const HomePage: React.FC = () => {
       path: '/chat',
       color: 'from-orange-500 to-red-500',
       delay: 0.5
-    },
-    {
-      icon: MessageSquare,
-      title: 'Oracle Room',
-      description: 'Advanced AI consultation room for complex research and strategic planning',
-      path: '/oracle-room',
-      color: 'from-indigo-500 to-purple-500',
-      delay: 0.6
     }
   ];
 
@@ -83,19 +76,6 @@ const HomePage: React.FC = () => {
     <div className={`min-h-screen pt-20 transition-colors duration-300 ${
       isDark ? 'bg-black' : 'bg-white'
     }`}>
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className={`absolute -top-40 -right-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse ${
-          isDark ? 'bg-glow-purple' : 'bg-purple-300'
-        }`}></div>
-        <div className={`absolute -bottom-40 -left-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse ${
-          isDark ? 'bg-glow-pink' : 'bg-pink-300'
-        }`}></div>
-        <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse ${
-          isDark ? 'bg-glow-blue' : 'bg-blue-300'
-        }`}></div>
-      </div>
-
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Hero Section */}
         <motion.div
@@ -181,11 +161,21 @@ const HomePage: React.FC = () => {
           </motion.div>
         </motion.div>
 
-        {/* Features Grid */}
+        {/* Today's Insight Section */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1 }}
+          className="mb-20"
+        >
+          <TodaysInsight />
+        </motion.div>
+
+        {/* Features Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20"
         >
           {features.map((feature, index) => {
@@ -241,7 +231,7 @@ const HomePage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
+          transition={{ duration: 0.8, delay: 1.4 }}
           className={`backdrop-blur-sm border rounded-3xl p-8 mb-12 shadow-xl ${
             isDark
               ? 'bg-white/5 border-white/10'
@@ -269,7 +259,7 @@ const HomePage: React.FC = () => {
                   key={stat.label}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 1.4 + index * 0.1 }}
+                  transition={{ duration: 0.6, delay: 1.6 + index * 0.1 }}
                   className="text-center"
                 >
                   <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 shadow-lg ${
@@ -299,7 +289,7 @@ const HomePage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.6 }}
+          transition={{ duration: 0.8, delay: 1.8 }}
           className={`text-center py-16 rounded-3xl backdrop-blur-sm border shadow-xl ${
             isDark
               ? 'bg-gradient-to-r from-glow-purple/10 to-glow-pink/10 border-glow-purple/20'

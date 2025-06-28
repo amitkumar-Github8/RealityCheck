@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, ExternalLink } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 const Footer: React.FC = () => {
@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
     <motion.footer
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className={`border-t backdrop-blur-xl transition-all duration-300 ${
+      className={`relative border-t backdrop-blur-xl transition-all duration-300 ${
         isDark 
           ? 'bg-black/80 border-slate-800/50' 
           : 'bg-white/80 border-slate-200/50'

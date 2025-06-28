@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Shield, Sun, Moon, TrendingUp, Brain, MessageSquare, Compass, Upload, Zap } from 'lucide-react';
+import { Shield, Sun, Moon, TrendingUp, Brain, Zap, Compass, Upload } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 const Navigation: React.FC = () => {
